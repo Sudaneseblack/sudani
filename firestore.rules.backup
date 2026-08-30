@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    // المستخدمون
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.name is string
+        && request.resource.data.email is string;
+
+      allow update: if isOwner(userId)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      allow delete: if false;
+    }
+
+    // المنشورات
+    match /posts/{postId} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.text is string;
+
+      allow update: if signedIn()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId;
+
+      allow delete: if signedIn()
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // التعليقات
+    match /posts/{postId}/comments/{commentId} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.text is string;
+
+      allow update: if signedIn()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId;
+
+      allow delete: if signedIn()
+        && resource.data.authorId == request.auth.uid;
+    }
+
+    // الإعجابات
+    match /posts/{postId}/likes/{userId} {
+      allow read: if signedIn();
+
+      allow create, delete: if signedIn()
+        && userId == request.auth.uid;
+
+      allow update: if false;
+    }
+
+    // المحادثات
+    match /chats/{chatId} {
+      allow read, write: if signedIn()
+        && request.auth.uid in resource.data.members;
+
+      match /messages/{messageId} {
+        allow read, create: if signedIn();
+        allow update, delete: if false;
+      }
+    }
+
+    // أي مسار غير مصرح به ممنوع
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,568 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================
+    // الوظائف الأساسية
+    // =========================================================
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validString(value, max) {
+      return value is string && value.size() <= max;
+    }
+
+    function chatExists(chatId) {
+      return exists(
+        /databases/$(database)/documents/chats/$(chatId)
+      );
+    }
+
+    function chatMember(chatId) {
+      return signedIn()
+        && chatExists(chatId)
+        && request.auth.uid in
+          get(
+            /databases/$(database)/documents/chats/$(chatId)
+          ).data.members;
+    }
+
+    function chatAdmin(chatId) {
+      return signedIn()
+        && chatExists(chatId)
+        && request.auth.uid in
+          get(
+            /databases/$(database)/documents/chats/$(chatId)
+          ).data.admins;
+    }
+
+
+    // =========================================================
+    // المستخدمون
+    // =========================================================
+
+    match /users/{userId} {
+
+      // المستخدم يرى بيانات حسابه الخاصة
+      allow read: if owner(userId);
+
+      // إنشاء الحساب
+      allow create: if owner(userId)
+        && request.resource.data.uid == userId
+        && validString(request.resource.data.name, 100)
+        && validString(request.resource.data.email, 200)
+        && validString(request.resource.data.username, 50)
+        && request.resource.data.createdAt is timestamp;
+
+      // تعديل الحساب
+      allow update: if owner(userId)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.email == resource.data.email;
+
+      allow delete: if false;
+
+
+      // =======================================================
+      // المتابعون
+      // =======================================================
+
+      match /followers/{followerId} {
+
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && followerId == request.auth.uid
+          && followerId != userId;
+
+        allow delete: if signedIn()
+          && followerId == request.auth.uid;
+
+        allow update: if false;
+      }
+
+
+      // =======================================================
+      // المتابَعون
+      // =======================================================
+
+      match /following/{targetId} {
+
+        allow read: if signedIn();
+
+        allow create, delete: if owner(userId)
+          && targetId != userId;
+
+        allow update: if false;
+      }
+
+
+      // =======================================================
+      // الأصدقاء
+      // =======================================================
+
+      match /friends/{friendId} {
+
+        allow read: if owner(userId);
+
+        allow create: if owner(userId)
+          && friendId != userId;
+
+        allow delete: if owner(userId);
+
+        allow update: if false;
+      }
+
+
+      // =======================================================
+      // الحظر
+      // =======================================================
+
+      match /blocked/{blockedUserId} {
+
+        allow read: if owner(userId);
+
+        allow create, delete: if owner(userId)
+          && blockedUserId != userId;
+
+        allow update: if false;
+      }
+    }
+
+
+    // =========================================================
+    // الملفات العامة
+    // =========================================================
+
+    match /publicProfiles/{userId} {
+
+      allow read: if signedIn();
+
+      allow create: if owner(userId)
+        && request.resource.data.uid == userId;
+
+      allow update: if owner(userId)
+        && request.resource.data.uid == resource.data.uid;
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // المنشورات
+    // =========================================================
+
+    match /posts/{postId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && validString(request.resource.data.text, 10000)
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if signedIn()
+        && resource.data.authorId == request.auth.uid
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      allow delete: if signedIn()
+        && resource.data.authorId == request.auth.uid;
+
+
+      // =======================================================
+      // التعليقات
+      // =======================================================
+
+      match /comments/{commentId} {
+
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && request.resource.data.authorId == request.auth.uid
+          && validString(request.resource.data.text, 5000)
+          && request.resource.data.createdAt is timestamp;
+
+        allow update: if signedIn()
+          && resource.data.authorId == request.auth.uid
+          && request.resource.data.authorId == resource.data.authorId
+          && request.resource.data.createdAt == resource.data.createdAt;
+
+        allow delete: if signedIn()
+          && resource.data.authorId == request.auth.uid;
+      }
+
+
+      // =======================================================
+      // الإعجابات
+      // =======================================================
+
+      match /likes/{userId} {
+
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && userId == request.auth.uid;
+
+        allow delete: if signedIn()
+          && userId == request.auth.uid;
+
+        allow update: if false;
+      }
+
+
+      // =======================================================
+      // المحفوظات
+      // =======================================================
+
+      match /saves/{userId} {
+
+        allow read: if owner(userId);
+
+        allow create: if owner(userId);
+
+        allow delete: if owner(userId);
+
+        allow update: if false;
+      }
+    }
+
+
+    // =========================================================
+    // الفيديوهات / Reels
+    // =========================================================
+
+    match /videos/{videoId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && validString(request.resource.data.title, 300)
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if signedIn()
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      allow delete: if signedIn()
+        && resource.data.ownerId == request.auth.uid;
+
+
+      match /likes/{userId} {
+
+        allow read: if signedIn();
+
+        allow create, delete: if signedIn()
+          && userId == request.auth.uid;
+
+        allow update: if false;
+      }
+
+
+      match /comments/{commentId} {
+
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && request.resource.data.authorId == request.auth.uid
+          && request.resource.data.createdAt is timestamp;
+
+        allow update, delete: if signedIn()
+          && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+
+    // =========================================================
+    // الحالات / Stories
+    // =========================================================
+
+    match /stories/{storyId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.expiresAt is timestamp;
+
+      allow update: if signedIn()
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId;
+
+      allow delete: if signedIn()
+        && resource.data.ownerId == request.auth.uid;
+
+
+      // مشاهدات الحالة
+      match /views/{userId} {
+
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && userId == request.auth.uid;
+
+        allow delete: if false;
+        allow update: if false;
+      }
+    }
+
+
+    // =========================================================
+    // المحادثات
+    // =========================================================
+
+    match /chats/{chatId} {
+
+      // أعضاء المحادثة فقط
+      allow read: if chatMember(chatId);
+
+      // إنشاء محادثة
+      allow create: if signedIn()
+        && request.resource.data.members is list
+        && request.auth.uid in request.resource.data.members
+        && request.resource.data.members.size() >= 2
+        && request.resource.data.members.size() <= 100
+        && request.resource.data.createdAt is timestamp;
+
+      // تعديل بيانات المحادثة
+      allow update: if chatMember(chatId)
+        && request.resource.data.members == resource.data.members;
+
+
+      // =======================================================
+      // الرسائل
+      // =======================================================
+
+      match /messages/{messageId} {
+
+        allow read: if chatMember(chatId);
+
+        allow create: if chatMember(chatId)
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.createdAt is timestamp
+          && validString(request.resource.data.type, 30);
+
+        // صاحب الرسالة فقط يستطيع تعديل محتواها
+        allow update: if chatMember(chatId)
+          && resource.data.senderId == request.auth.uid
+          && request.resource.data.senderId == resource.data.senderId
+          && request.resource.data.createdAt == resource.data.createdAt;
+
+        // صاحب الرسالة يستطيع حذفها
+        allow delete: if chatMember(chatId)
+          && resource.data.senderId == request.auth.uid;
+      }
+
+
+      // =======================================================
+      // قراءة الرسائل
+      // =======================================================
+
+      match /reads/{userId} {
+
+        allow read: if chatMember(chatId);
+
+        allow create, update: if chatMember(chatId)
+          && userId == request.auth.uid;
+
+        allow delete: if false;
+      }
+
+
+      // =======================================================
+      // حالة الكتابة
+      // =======================================================
+
+      match /typing/{userId} {
+
+        allow read: if chatMember(chatId);
+
+        allow create, update, delete: if chatMember(chatId)
+          && userId == request.auth.uid;
+      }
+
+
+      // =======================================================
+      // الرسائل المثبتة
+      // =======================================================
+
+      match /pinned/{messageId} {
+
+        allow read: if chatMember(chatId);
+
+        allow create, delete: if chatAdmin(chatId);
+
+        allow update: if false;
+      }
+    }
+
+
+    // =========================================================
+    // الإشعارات
+    // =========================================================
+
+    match /notifications/{userId}/items/{notificationId} {
+
+      allow read: if owner(userId);
+
+      allow create: if signedIn();
+
+      allow update: if owner(userId);
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // الأجهزة الخاصة بالمستخدم
+    // =========================================================
+
+    match /devices/{userId}/items/{deviceId} {
+
+      allow read: if owner(userId);
+
+      allow create: if owner(userId);
+
+      allow update: if owner(userId);
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // حالة المستخدم / Online
+    // =========================================================
+
+    match /presence/{userId} {
+
+      allow read: if signedIn();
+
+      allow create, update: if owner(userId);
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // المكالمات الصوتية والفيديو
+    // =========================================================
+
+    match /calls/{callId} {
+
+      allow read: if signedIn()
+        && request.auth.uid in resource.data.participants;
+
+      allow create: if signedIn()
+        && request.auth.uid in request.resource.data.participants
+        && request.resource.data.participants.size() >= 2
+        && request.resource.data.participants.size() <= 20
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if signedIn()
+        && request.auth.uid in resource.data.participants
+        && request.auth.uid in request.resource.data.participants;
+
+      allow delete: if signedIn()
+        && request.auth.uid in resource.data.participants;
+    }
+
+
+    // =========================================================
+    // البحث
+    // =========================================================
+
+    match /search/{searchId} {
+
+      allow read: if signedIn();
+
+      allow create: if signedIn();
+
+      allow update, delete: if signedIn();
+    }
+
+
+    // =========================================================
+    // الإبلاغ عن المحتوى
+    // =========================================================
+
+    match /reports/{reportId} {
+
+      allow create: if signedIn()
+        && request.resource.data.reporterId == request.auth.uid
+        && validString(request.resource.data.reason, 1000)
+        && request.resource.data.createdAt is timestamp;
+
+      allow read: if signedIn()
+        && request.resource.data.reporterId == request.auth.uid;
+
+      allow update, delete: if false;
+    }
+
+
+    // =========================================================
+    // إعدادات الخصوصية
+    // =========================================================
+
+    match /privacy/{userId} {
+
+      allow read: if owner(userId);
+
+      allow create: if owner(userId)
+        && request.resource.data.userId == userId;
+
+      allow update: if owner(userId)
+        && request.resource.data.userId == userId;
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // إعدادات التطبيق
+    // =========================================================
+
+    match /settings/{userId} {
+
+      allow read: if owner(userId);
+
+      allow create: if owner(userId);
+
+      allow update: if owner(userId);
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // آخر ظهور
+    // =========================================================
+
+    match /lastSeen/{userId} {
+
+      allow read: if signedIn();
+
+      allow create, update: if owner(userId);
+
+      allow delete: if owner(userId);
+    }
+
+
+    // =========================================================
+    // منع أي وصول لمجموعات غير معروفة
+    // =========================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

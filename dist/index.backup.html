@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#1877f2">
+<meta name="description" content="سوداني يوب - منصة اجتماعية سودانية للتواصل والمشاركة.">
+<meta name="author" content="محمد فيصل">
+
+<title>سوداني يوب | منصة التواصل الاجتماعي</title>
+
+<style>
+:root{
+  --primary:#1877f2;
+  --primary-dark:#0d5dcc;
+  --bg:#f3f6fa;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#6d7787;
+  --border:#e2e7ee;
+  --danger:#d93025;
+  --success:#188038;
+  --warning:#b06000;
+  --radius:18px;
+  --shadow:0 15px 45px rgba(25,55,95,.12);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  font-family:Arial,Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at top right,#e8f2ff 0,transparent 32%),
+    var(--bg);
+  color:var(--text);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+   AUTH PAGE
+========================= */
+
+#auth-view{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.auth-shell{
+  width:100%;
+  max-width:1050px;
+  display:grid;
+  grid-template-columns:1fr 440px;
+  gap:35px;
+  align-items:center;
+}
+
+.brand-area{
+  padding:20px;
+}
+
+.brand{
+  font-size:64px;
+  font-weight:900;
+  color:var(--primary);
+  letter-spacing:-3px;
+  margin-bottom:12px;
+}
+
+.brand-owner{
+  display:inline-block;
+  background:#e9f3ff;
+  color:var(--primary);
+  padding:7px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.tagline{
+  font-size:28px;
+  line-height:1.5;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+.brand-description{
+  color:var(--muted);
+  line-height:1.9;
+  font-size:16px;
+  max-width:600px;
+}
+
+.features{
+  margin-top:25px;
+  display:grid;
+  gap:12px;
+}
+
+.feature{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  background:rgba(255,255,255,.72);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px;
+}
+
+.feature-icon{
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+  border-radius:12px;
+  background:#eaf3ff;
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
+
+.feature strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.feature span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* CARD */
+
+.auth-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:25px;
+  box-shadow:var(--shadow);
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  background:#eef1f5;
+  padding:5px;
+  border-radius:12px;
+  margin-bottom:23px;
+}
+
+.tab{
+  border:0;
+  background:transparent;
+  color:#596474;
+  border-radius:9px;
+  padding:12px 8px;
+  font-weight:800;
+}
+
+.tab.active{
+  background:#fff;
+  color:var(--primary);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+
+.form{
+  display:none;
+}
+
+.form.active{
+  display:block;
+}
+
+.form-title{
+  font-size:25px;
+  margin-bottom:7px;
+}
+
+.form-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.field{
+  margin-bottom:13px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+.input,
+select.input{
+  width:100%;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  border-radius:11px;
+  padding:13px 14px;
+  outline:none;
+  transition:.18s;
+}
+
+.input:focus,
+select.input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(24,119,242,.1);
+}
+
+.input::placeholder{
+  color:#9aa3af;
+}
+
+.password-toggle{
+  position:absolute;
+  left:6px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  color:#687386;
+  padding:7px;
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.primary-btn{
+  width:100%;
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  border-radius:11px;
+  padding:14px;
+  font-weight:900;
+  transition:.15s;
+}
+
+.primary-btn:hover{
+  background:var(--primary-dark);
+}
+
+.primary-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.secondary-btn{
+  width:100%;
+  border:1px solid var(--border);
+  background:#fff;
+  color:#374151;
+  border-radius:11px;
+  padding:12px;
+  font-weight:800;
+  margin-top:10px;
+}
+
+.forgot{
+  display:block;
+  border:0;
+  background:transparent;
+  color:var(--primary);
+  margin:10px auto 0;
+  font-size:13px;
+  font-weight:700;
+}
+
+.message{
+  display:none;
+  margin-top:13px;
+  padding:11px 12px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.error{
+  background:#fff0ef;
+  color:var(--danger);
+  border:1px solid #ffd7d3;
+}
+
+.message.success{
+  background:#edf9f1;
+  color:var(--success);
+  border:1px solid #cdeed7;
+}
+
+.footer-note{
+  margin-top:18px;
+  text-align:center;
+  color:#8992a0;
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* =========================
+   APP
+========================= */
+
+#app-view{
+  min-height:100vh;
+  background:#f4f6f9;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.topbar-inner{
+  max-width:1100px;
+  margin:auto;
+  padding:11px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.mini-logo{
+  color:var(--primary);
+  font-size:28px;
+  font-weight:900;
+}
+
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#1877f2,#65a5ff);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:18px;
+}
+
+.user-chip-text{
+  min-width:0;
+}
+
+.user-chip-text strong,
+.user-chip-text span{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.user-chip-text strong{
+  font-size:13px;
+}
+
+.user-chip-text span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.logout-btn{
+  border:1px solid var(--border);
+  background:#fff;
+  color:#3f4958;
+  border-radius:9px;
+  padding:8px 12px;
+  font-weight:800;
+}
+
+.app-container{
+  max-width:1100px;
+  margin:auto;
+  padding:22px 16px 50px;
+}
+
+.welcome-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 24px rgba(30,55,90,.06);
+}
+
+.welcome-card h2{
+  margin-bottom:8px;
+}
+
+.welcome-card>p{
+  color:var(--muted);
+  line-height:1.8;
+}
+
+.owner-box{
+  margin-top:18px;
+  padding:14px;
+  border-radius:13px;
+  background:#eef6ff;
+  border:1px solid #d8eaff;
+  color:#1757a6;
+}
+
+.owner-box strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.account-info{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.info-box{
+  background:#f7f9fc;
+  border:1px solid #e8edf3;
+  border-radius:12px;
+  padding:13px;
+}
+
+.info-box span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.info-box strong{
+  font-size:14px;
+  word-break:break-word;
+}
+
+.future-section{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.future-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:17px;
+}
+
+.future-card .icon{
+  font-size:24px;
+  margin-bottom:9px;
+}
+
+.future-card strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.future-card span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+#loading-screen{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:12px;
+}
+
+.spinner{
+  width:42px;
+  height:42px;
+  border:4px solid #e4ecf7;
+  border-top-color:var(--primary);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:820px){
+
+  .auth-shell{
+    grid-template-columns:1fr;
+    max-width:500px;
+    gap:15px;
+  }
+
+  .brand-area{
+    text-align:center;
+    padding:5px 10px;
+  }
+
+  .brand{
+    font-size:48px;
+  }
+
+  .tagline{
+    font-size:22px;
+  }
+
+  .brand-description{
+    margin:auto;
+    font-size:14px;
+  }
+
+  .features{
+    text-align:right;
+  }
+
+  .future-section{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px){
+
+  #auth-view{
+    padding:12px;
+  }
+
+  .auth-card{
+    padding:18px;
+  }
+
+  .brand{
+    font-size:40px;
+  }
+
+  .tagline{
+    font-size:19px;
+  }
+
+  .two,
+  .account-info{
+    grid-template-columns:1fr;
+  }
+
+  .topbar-inner{
+    padding:9px 11px;
+  }
+
+  .mini-logo{
+    font-size:24px;
+  }
+
+  .user-chip-text{
+    display:none;
+  }
+
+  .welcome-card{
+    padding:19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     LOADING
+========================= -->
+
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <strong>جاري تحميل سوداني يوب...</strong>
+  <span style="color:#777;font-size:12px;">يرجى الانتظار</span>
+</div>
+
+
+<!-- =========================
+     AUTH VIEW
+========================= -->
+
+<section id="auth-view" class="hidden">
+
+  <div class="auth-shell">
+
+    <div class="brand-area">
+
+      <div class="brand">سوداني</div>
+
+      <div class="brand-owner">
+        الموقع ملك محمد فيصل
+      </div>
+
+      <div class="tagline">
+        تواصل مع الناس بسهولة وأمان 🇸🇩
+      </div>
+
+      <p class="brand-description">
+        منصة سوداني يوب للتواصل الاجتماعي والمشاركة.
+        أنشئ حسابك الحقيقي، وسجّل الدخول من أي جهاز،
+        واحتفظ ببيانات حسابك بشكل آمن.
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">👤</div>
+          <div>
+            <strong>حساب شخصي</strong>
+            <span>ملف شخصي وبيانات محفوظة لكل مستخدم.</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔐</div>
+          <div>
+            <strong>مصادقة حقيقية</strong>
+            <span>Firebase Authentication لإدارة الحسابات.</span>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🚀</div>
+          <div>
+            <strong>منصة قابلة للتوسع</strong>
+            <span>جاهزة لإضافة المنشورات والفيديوهات والمحادثات.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="auth-card">
+
+      <div class="tabs">
+
+        <button id="login-tab"
+                class="tab active"
+                type="button">
+          تسجيل الدخول
+        </button>
+
+        <button id="register-tab"
+                class="tab"
+                type="button">
+          إنشاء حساب
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <div id="login-form" class="form active">
+
+        <h2 class="form-title">
+          مرحبًا بك 👋
+        </h2>
+
+        <p class="form-subtitle">
+          سجّل الدخول إلى حسابك في سوداني يوب.
+        </p>
+
+
+        <div class="field">
+
+          <label for="login-email">
+            البريد الإلكتروني
+          </label>
+
+          <input
+            id="login-email"
+            class="input"
+            type="email"
+            placeholder="example@email.com"
+            autocomplete="email">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="login-password">
+            كلمة المرور
+          </label>
+
+          <div class="input-wrap">
+
+            <input
+              id="login-password"
+              class="input"
+              type="password"
+              placeholder="أدخل كلمة المرور"
+              autocomplete="current-password"
+              style="padding-left:48px;">
+
+            <button
+              id="login-password-toggle"
+              class="password-toggle"
+              type="button"
+              aria-label="إظهار كلمة المرور">
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="login-button"
+          class="primary-btn"
+          type="button">
+          تسجيل الدخول
+        </button>
+
+
+        <button
+          id="forgot-button"
+          class="forgot"
+          type="button">
+          نسيت كلمة المرور؟
+        </button>
+
+
+        <div
+          id="login-message"
+          class="message"
+          role="alert">
+        </div>
+
+      </div>
+
+
+      <!-- REGISTER -->
+
+      <div id="register-form" class="form">
+
+        <h2 class="form-title">
+          إنشاء حساب جديد
+        </h2>
+
+        <p class="form-subtitle">
+          املأ البيانات التالية لإنشاء حسابك في سوداني.
+        </p>
+
+
+        <div class="field">
+
+          <label for="full-name">
+            الاسم الحقيقي
+          </label>
+
+          <input
+            id="full-name"
+            class="input"
+            type="text"
+            placeholder="اكتب اسمك الحقيقي"
+            maxlength="80"
+            autocomplete="name">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="username">
+            اسم المستخدم
+          </label>
+
+          <input
+            id="username"
+            class="input"
+            type="text"
+            placeholder="@username"
+            maxlength="30"
+            autocomplete="username">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="phone">
+            رقم الهاتف
+          </label>
+
+          <input
+            id="phone"
+            class="input"
+            type="tel"
+            placeholder="+249xxxxxxxxx"
+            maxlength="20"
+            autocomplete="tel">
+
+        </div>
+
+
+        <div class="two">
+
+          <div class="field">
+
+            <label for="birth-date">
+              تاريخ الميلاد
+            </label>
+
+            <input
+              id="birth-date"
+              class="input"
+              type="date"
+              autocomplete="bday">
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="gender">
+              الجنس
+            </label>
+
+            <select
+              id="gender"
+              class="input">
+
+              <option value="">
+                اختر
+              </option>
+
+              <option value="male">
+                ذكر
+              </option>
+
+              <option value="female">
+                أنثى
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="register-email">
+            البريد الإلكتروني
+          </label>
+
+          <input
+            id="register-email"
+            class="input"
+            type="email"
+            placeholder="example@email.com"
+            autocomplete="email">
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="register-password">
+            كلمة المرور
+          </label>
+
+          <div class="input-wrap">
+
+            <input
+              id="register-password"
+              class="input"
+              type="password"
+              placeholder="أنشئ كلمة مرور قوية"
+              minlength="8"
+              autocomplete="new-password"
+              style="padding-left:48px;">
+
+            <button
+              id="register-password-toggle"
+              class="password-toggle"
+              type="button"
+              aria-label="إظهار كلمة المرور">
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="confirm-password">
+            تأكيد كلمة المرور
+          </label>
+
+          <div class="input-wrap">
+
+            <input
+              id="confirm-password"
+              class="input"
+              type="password"
+              placeholder="أعد كتابة كلمة المرور"
+              minlength="8"
+              autocomplete="new-password"
+              style="padding-left:48px;">
+
+            <button
+              id="confirm-password-toggle"
+              class="password-toggle"
+              type="button"
+              aria-label="إظهار كلمة المرور">
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <label class="check-row"
+               style="display:flex;gap:8px;margin:10px 0 15px;font-size:12px;line-height:1.7;color:#606b7a;">
+
+          <input
+            id="terms"
+            type="checkbox"
+            style="margin-top:4px;">
+
+          <span>
+            أوافق على شروط استخدام سوداني وسياسة الخصوصية.
+          </span>
+
+        </label>
+
+
+        <button
+          id="register-button"
+          class="primary-btn"
+          type="button">
+          إنشاء الحساب
+        </button>
+
+
+        <div
+          id="register-message"
+          class="message"
+          role="alert">
+        </div>
+
+      </div>
+
+
+      <div class="footer-note">
+        المصادقة تتم بواسطة Firebase Authentication.
+        بيانات الملف الشخصي تحفظ في Firestore وفق قواعد الوصول.
+        <br>
+        © محمد فيصل — سوداني يوب
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     APP VIEW
+========================= -->
+
+<section id="app-view" class="hidden">
+
+  <header class="topbar">
+
+    <div class="topbar-inner">
+
+      <div class="mini-logo">
+        سوداني
+      </div>
+
+
+      <div class="user-chip">
+
+        <div id="app-avatar" class="avatar">
+          س
+        </div>
+
+        <div class="user-chip-text">
+
+          <strong id="app-name">
+            مستخدم سوداني
+          </strong>
+
+          <span id="app-username">
+            @username
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="logout-button"
+        class="logout-btn"
+        type="button">
+        خروج
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main class="app-container">
+
+    <div class="welcome-card">
+
+      <h2>
+        أهلاً بك في سوداني 👋
+      </h2>
+
+      <p>
+        تم تسجيل الدخول إلى حسابك بنجاح.
+        هذه هي البداية الأساسية لمنصة سوداني يوب.
+      </p>
+
+
+      <div class="owner-box">
+
+        <strong>
+          🇸🇩 سوداني يوب
+        </strong>
+
+        الموقع ملك
+        <strong>
+          محمد فيصل
+        </strong>
+
+      </div>
+
+
+      <div class="account-info">
+
+        <div class="info-box">
+          <span>الاسم الحقيقي</span>
+          <strong id="data-name">—</strong>
+        </div>
+
+        <div class="info-box">
+          <span>اسم المستخدم</span>
+          <strong id="data-username">—</strong>
+        </div>
+
+        <div class="info-box">
+          <span>البريد الإلكتروني</span>
+          <strong id="data-email">—</strong>
+        </div>
+
+        <div class="info-box">
+          <span>رقم الهاتف</span>
+          <strong id="data-phone">—</strong>
+        </div>
+
+        <div class="info-box">
+          <span>تاريخ الميلاد</span>
+          <strong id="data-birth">—</strong>
+        </div>
+
+        <div class="info-box">
+          <span>الجنس</span>
+          <strong id="data-gender">—</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="future-section">
+
+      <div class="future-card">
+        <div class="icon">🎬</div>
+        <strong>الفيديوهات</strong>
+        <span>
+          قسم الفيديوهات سيكون جزءًا من المرحلة التالية.
+        </span>
+      </div>
+
+      <div class="future-card">
+        <div class="icon">💬</div>
+        <strong>المحادثات</strong>
+        <span>
+          سنضيف المحادثات والتواصل بين المستخدمين لاحقًا.
+        </span>
+      </div>
+
+      <div class="future-card">
+        <div class="icon">👥</div>
+        <strong>الأصدقاء والمتابعون</strong>
+        <span>
+          بنية المنصة مجهزة للتوسع بإضافة المتابعة والأصدقاء.
+        </span>
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<script type="module">
+
+/* =====================================================
+   FIREBASE IMPORTS
+===================================================== */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+  sendPasswordResetEmail
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyAJMWB4_aK1s0tkNMqG5Jmza2UTl7DMzlI",
+
+  authDomain:
+    "sudani-b052d.firebaseapp.com",
+
+  projectId:
+    "sudani-b052d",
+
+  storageBucket:
+    "sudani-b052d.firebasestorage.app",
+
+  messagingSenderId:
+    "1035591661594",
+
+  appId:
+    "1:1035591661594:web:2c3ac031b7b9dcc00db9a3",
+
+  measurementId:
+    "G-WVRJE3WFX0"
+};
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+const firebaseApp =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(firebaseApp);
+
+const db =
+  getFirestore(firebaseApp);
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loadingScreen =
+  document.getElementById("loading-screen");
+
+const authView =
+  document.getElementById("auth-view");
+
+const appView =
+  document.getElementById("app-view");
+
+const loginTab =
+  document.getElementById("login-tab");
+
+const registerTab =
+  document.getElementById("register-tab");
+
+const loginForm =
+  document.getElementById("login-form");
+
+const registerForm =
+  document.getElementById("register-form");
+
+const loginEmail =
+  document.getElementById("login-email");
+
+const loginPassword =
+  document.getElementById("login-password");
+
+const fullName =
+  document.getElementById("full-name");
+
+const username =
+  document.getElementById("username");
+
+const phone =
+  document.getElementById("phone");
+
+const birthDate =
+  document.getElementById("birth-date");
+
+const gender =
+  document.getElementById("gender");
+
+const registerEmail =
+  document.getElementById("register-email");
+
+const registerPassword =
+  document.getElementById("register-password");
+
+const confirmPassword =
+  document.getElementById("confirm-password");
+
+const terms =
+  document.getElementById("terms");
+
+const loginButton =
+  document.getElementById("login-button");
+
+const registerButton =
+  document.getElementById("register-button");
+
+const forgotButton =
+  document.getElementById("forgot-button");
+
+const logoutButton =
+  document.getElementById("logout-button");
+
+
+/* =====================================================
+   MESSAGE SYSTEM
+===================================================== */
+
+function showMessage(elementId, text, type="error"){
+
+  const element =
+    document.getElementById(elementId);
+
+  element.textContent = text;
+
+  element.className =
+    "message show " + type;
+}
+
+
+function clearMessage(elementId){
+
+  const element =
+    document.getElementById(elementId);
+
+  element.textContent = "";
+
+  element.className = "message";
+}
+
+
+/* =====================================================
+   FIREBASE ERROR TRANSLATION
+===================================================== */
+
+function firebaseError(error){
+
+  const code =
+    error?.code || "";
+
+  const messages = {
+
+    "auth/email-already-in-use":
+      "هذا البريد الإلكتروني مستخدم بالفعل.",
+
+    "auth/invalid-email":
+      "البريد الإلكتروني غير صحيح.",
+
+    "auth/weak-password":
+      "كلمة المرور ضعيفة. استخدم 8 أحرف أو أكثر.",
+
+    "auth/invalid-credential":
+      "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+
+    "auth/user-not-found":
+      "لا يوجد حساب بهذا البريد الإلكتروني.",
+
+    "auth/wrong-password":
+      "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+
+    "auth/too-many-requests":
+      "تمت محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
+
+    "auth/network-request-failed":
+      "تعذر الاتصال بالإنترنت. تحقق من الاتصال وحاول مرة أخرى.",
+
+    "auth/operation-not-allowed":
+      "طريقة تسجيل الدخول هذه غير مفعلة في Firebase.",
+
+    "auth/requires-recent-login":
+      "يرجى تسجيل الدخول مرة أخرى ثم إعادة المحاولة.",
+
+    "permission-denied":
+      "ليس لديك صلاحية لتنفيذ هذه العملية.",
+
+    "permission-denied-error":
+      "قواعد Firestore تمنع هذه العملية."
+
+  };
+
+  return messages[code] ||
+    "حدث خطأ غير متوقع. افتح وحدة التحكم لمعرفة التفاصيل.";
+}
+
+
+/* =====================================================
+   SHOW LOGIN
+===================================================== */
+
+function showLogin(){
+
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
+
+  loginForm.classList.add("active");
+  registerForm.classList.remove("active");
+
+  clearMessage("register-message");
+}
+
+
+/* =====================================================
+   SHOW REGISTER
+===================================================== */
+
+function showRegister(){
+
+  registerTab.classList.add("active");
+  loginTab.classList.remove("active");
+
+  registerForm.classList.add("active");
+  loginForm.classList.remove("active");
+
+  clearMessage("login-message");
+}
+
+
+loginTab.addEventListener(
+  "click",
+  showLogin
+);
+
+registerTab.addEventListener(
+  "click",
+  showRegister
+);
+
+
+/* =====================================================
+   PASSWORD VISIBILITY
+===================================================== */
+
+function togglePassword(inputId, buttonId){
+
+  const input =
+    document.getElementById(inputId);
+
+  const button =
+    document.getElementById(buttonId);
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      if(input.type === "password"){
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+      }else{
+
+        input.type = "password";
+
+        button.textContent = "👁";
+
+      }
+
+    }
+  );
+}
+
+
+togglePassword(
+  "login-password",
+  "login-password-toggle"
+);
+
+togglePassword(
+  "register-password",
+  "register-password-toggle"
+);
+
+togglePassword(
+  "confirm-password",
+  "confirm-password-toggle"
+);
+
+
+/* =====================================================
+   USERNAME VALIDATION
+===================================================== */
+
+function normalizeUsername(value){
+
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/^@+/,"")
+    .replace(/[^a-z0-9_.]/g,"");
+}
+
+
+/* =====================================================
+   AGE VALIDATION
+===================================================== */
+
+function validBirthDate(value){
+
+  if(!value){
+    return false;
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return false;
+  }
+
+  const now =
+    new Date();
+
+  if(date > now){
+    return false;
+  }
+
+  return true;
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+async function register(){
+
+  clearMessage("register-message");
+
+  const name =
+    fullName.value.trim();
+
+  const user =
+    normalizeUsername(username.value);
+
+  const userPhone =
+    phone.value.trim();
+
+  const birth =
+    birthDate.value;
+
+  const selectedGender =
+    gender.value;
+
+  const email =
+    registerEmail.value.trim().toLowerCase();
+
+  const password =
+    registerPassword.value;
+
+  const confirm =
+    confirmPassword.value;
+
+
+  /* VALIDATION */
+
+  if(name.length < 2){
+
+    showMessage(
+      "register-message",
+      "اكتب اسمًا صحيحًا مكونًا من حرفين على الأقل."
+    );
+
+    return;
+  }
+
+
+  if(user.length < 3){
+
+    showMessage(
+      "register-message",
+      "اسم المستخدم يجب أن يحتوي على 3 أحرف أو أرقام على الأقل."
+    );
+
+    return;
+  }
+
+
+  if(!/^[a-z0-9_.]+$/.test(user)){
+
+    showMessage(
+      "register-message",
+      "اسم المستخدم يجب أن يحتوي على أحرف إنجليزية وأرقام أو _ أو . فقط."
+    );
+
+    return;
+  }
+
+
+  if(!userPhone){
+
+    showMessage(
+      "register-message",
+      "اكتب رقم الهاتف."
+    );
+
+    return;
+  }
+
+
+  if(!validBirthDate(birth)){
+
+    showMessage(
+      "register-message",
+      "اختر تاريخ ميلاد صحيح."
+    );
+
+    return;
+  }
+
+
+  if(!selectedGender){
+
+    showMessage(
+      "register-message",
+      "اختر الجنس."
+    );
+
+    return;
+  }
+
+
+  if(!email){
+
+    showMessage(
+      "register-message",
+      "اكتب البريد الإلكتروني."
+    );
+
+    return;
+  }
+
+
+  if(password.length < 8){
+
+    showMessage(
+      "register-message",
+      "كلمة المرور يجب أن تحتوي على 8 أحرف أو أكثر."
+    );
+
+    return;
+  }
+
+
+  if(password !== confirm){
+
+    showMessage(
+      "register-message",
+      "كلمتا المرور غير متطابقتين."
+    );
+
+    return;
+  }
+
+
+  if(!terms.checked){
+
+    showMessage(
+      "register-message",
+      "يجب الموافقة على شروط استخدام سوداني."
+    );
+
+    return;
+  }
+
+
+  registerButton.disabled = true;
+
+  registerButton.textContent =
+    "جاري إنشاء الحساب...";
+
+
+  try{
+
+    /* CREATE AUTH USER */
+
+    const result =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    const userAccount =
+      result.user;
+
+
+    /* UPDATE AUTH PROFILE */
+
+    await updateProfile(
+      userAccount,
+      {
+        displayName:name
+      }
+    );
+
+
+    /* SAVE PROFILE */
+
+    await setDoc(
+      doc(
+        db,
+        "users",
+        userAccount.uid
+      ),
+      {
+
+        uid:
+          userAccount.uid,
+
+        name:
+          name,
+
+        username:
+          user,
+
+        phone:
+          userPhone,
+
+        email:
+          email,
+
+        birthDate:
+          birth,
+
+        gender:
+          selectedGender,
+
+        createdAt:
+          serverTimestamp(),
+
+        updatedAt:
+          serverTimestamp()
+
+      }
+    );
+
+
+    showMessage(
+      "register-message",
+      "تم إنشاء حسابك بنجاح ✅ جاري فتح حسابك...",
+      "success"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
+
+    showMessage(
+      "register-message",
+      firebaseError(error)
+    );
+
+  }finally{
+
+    registerButton.disabled = false;
+
+    registerButton.textContent =
+      "إنشاء الحساب";
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function login(){
+
+  clearMessage("login-message");
+
+  const email =
+    loginEmail.value.trim().toLowerCase();
+
+  const password =
+    loginPassword.value;
+
+
+  if(!email){
+
+    showMessage(
+      "login-message",
+      "اكتب البريد الإلكتروني."
+    );
+
+    return;
+  }
+
+
+  if(!password){
+
+    showMessage(
+      "login-message",
+      "اكتب كلمة المرور."
+    );
+
+    return;
+  }
+
+
+  loginButton.disabled = true;
+
+  loginButton.textContent =
+    "جاري تسجيل الدخول...";
+
+
+  try{
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
+
+    showMessage(
+      "login-message",
+      firebaseError(error)
+    );
+
+  }finally{
+
+    loginButton.disabled = false;
+
+    loginButton.textContent =
+      "تسجيل الدخول";
+
+  }
+
+}
+
+
+/* =====================================================
+   PASSWORD RESET
+===================================================== */
+
+async function resetPassword(){
+
+  clearMessage("login-message");
+
+  const email =
+    loginEmail.value.trim().toLowerCase();
+
+
+  if(!email){
+
+    showMessage(
+      "login-message",
+      "اكتب بريدك الإلكتروني أولًا ثم اضغط نسيت كلمة المرور."
+    );
+
+    loginEmail.focus();
+
+    return;
+  }
+
+
+  forgotButton.disabled = true;
+
+  forgotButton.textContent =
+    "جاري الإرسال...";
+
+
+  try{
+
+    await sendPasswordResetEmail(
+      auth,
+      email
+    );
+
+
+    showMessage(
+      "login-message",
+      "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني ✅",
+      "success"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "PASSWORD RESET ERROR:",
+      error
+    );
+
+    showMessage(
+      "login-message",
+      firebaseError(error)
+    );
+
+  }finally{
+
+    forgotButton.disabled = false;
+
+    forgotButton.textContent =
+      "نسيت كلمة المرور؟";
+
+  }
+
+}
+
+
+forgotButton.addEventListener(
+  "click",
+  resetPassword
+);
+
+
+/* =====================================================
+   LOAD USER PROFILE
+===================================================== */
+
+async function loadUserProfile(user){
+
+  try{
+
+    const reference =
+      doc(
+        db,
+        "users",
+        user.uid
+      );
+
+    const snapshot =
+      await getDoc(reference);
+
+
+    if(!snapshot.exists()){
+
+      console.warn(
+        "User Firestore profile does not exist."
+      );
+
+      fillUserInterface(
+        user,
+        {}
+      );
+
+      return;
+    }
+
+
+    const data =
+      snapshot.data();
+
+
+    fillUserInterface(
+      user,
+      data
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "PROFILE LOAD ERROR:",
+      error
+    );
+
+    fillUserInterface(
+      user,
+      {}
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FILL USER INTERFACE
+===================================================== */
+
+function fillUserInterface(user,data){
+
+  const name =
+    data.name ||
+    user.displayName ||
+    "مستخدم سوداني";
+
+  const userUsername =
+    data.username
+      ? "@" + data.username
+      : "@username";
+
+  const email =
+    data.email ||
+    user.email ||
+    "—";
+
+  const userPhone =
+    data.phone ||
+    "—";
+
+  const birth =
+    data.birthDate ||
+    "—";
+
+  let genderText =
+    "—";
+
+  if(data.gender === "male"){
+    genderText = "ذكر";
+  }
+
+  if(data.gender === "female"){
+    genderText = "أنثى";
+  }
+
+
+  document.getElementById(
+    "app-name"
+  ).textContent = name;
+
+
+  document.getElementById(
+    "app-username"
+  ).textContent = userUsername;
+
+
+  document.getElementById(
+    "data-name"
+  ).textContent = name;
+
+
+  document.getElementById(
+    "data-username"
+  ).textContent = userUsername;
+
+
+  document.getElementById(
+    "data-email"
+  ).textContent = email;
+
+
+  document.getElementById(
+    "data-phone"
+  ).textContent = userPhone;
+
+
+  document.getElementById(
+    "data-birth"
+  ).textContent = birth;
+
+
+  document.getElementById(
+    "data-gender"
+  ).textContent = genderText;
+
+
+  const avatar =
+    name.charAt(0).toUpperCase();
+
+
+  document.getElementById(
+    "app-avatar"
+  ).textContent = avatar;
+
+}
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+onAuthStateChanged(
+  auth,
+  async(user)=>{
+
+    try{
+
+      if(user){
+
+        authView.classList.add(
+          "hidden"
+        );
+
+        appView.classList.remove(
+          "hidden"
+        );
+
+        await loadUserProfile(user);
+
+      }else{
+
+        appView.classList.add(
+          "hidden"
+        );
+
+        authView.classList.remove(
+          "hidden"
+        );
+
+      }
+
+    }catch(error){
+
+      console.error(
+        "AUTH STATE ERROR:",
+        error
+      );
+
+    }finally{
+
+      loadingScreen.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+logoutButton.addEventListener(
+  "click",
+  async()=>{
+
+    logoutButton.disabled = true;
+
+    logoutButton.textContent =
+      "جاري الخروج...";
+
+
+    try{
+
+      await signOut(auth);
+
+    }catch(error){
+
+      console.error(
+        "LOGOUT ERROR:",
+        error
+      );
+
+      alert(
+        firebaseError(error)
+      );
+
+    }finally{
+
+      logoutButton.disabled = false;
+
+      logoutButton.textContent =
+        "خروج";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   ENTER KEY SUPPORT
+===================================================== */
+
+loginPassword.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key === "Enter"){
+      login();
+    }
+
+  }
+);
+
+
+confirmPassword.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key === "Enter"){
+      register();
+    }
+
+  }
+);
+
+
+loginButton.addEventListener(
+  "click",
+  login
+);
+
+registerButton.addEventListener(
+  "click",
+  register
+);
+
+
+/* =====================================================
+   GLOBAL SAFETY
+===================================================== */
+
+window.addEventListener(
+  "error",
+  event=>{
+
+    console.error(
+      "PAGE ERROR:",
+      event.error || event.message
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
